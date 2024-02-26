@@ -1,0 +1,30 @@
+{
+  "name": "@aoitelegram/plugins",
+  "version": "0.0.1",
+  "description": "A manager of plugins for the aoitelegram",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sempai<zadmanthegreat@gmail.com>",
+  "homepage": "https://aoitelegram.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aoitelegram/plugins"
+  },
+  "files": [
+    "./dist",
+    "package.json",
+    "README.md"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^18.19.18",
+    "aoitelegram": "^0.8.2"
+  },
+  "dependencies": {
+    "fs-extra": "^11.2.0",
+    "import-sync": "^2.2.0"
+  }
+}
