@@ -60,7 +60,7 @@ For detailed documentation and usage instructions, please refer to the [aoiteleg
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/@aoitelegram/plugins/LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/aoitelegram/plugins/blob/main/LICENSE) file for details.
 
 ## Contributing
 
