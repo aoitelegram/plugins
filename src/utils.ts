@@ -33,61 +33,51 @@ function loadPluginsFunction(
   aoitelegram: AoiClient,
   options: PluginOptions = {},
 ) {
-  const processFile = (itemPath: string) => {
-    const dataRequire = importSync(itemPath);
-    let dataFunction: DataFunction | DataFunction[] =
-      dataRequire.default || dataRequire;
+  const items = fs.readdirSync(dirPath, { recursive: true });
+  for (const item of items) {
+    if (typeof item !== "string" || !item.endsWith(".js")) continue;
+    const itemPath = path.join(process.cwd(), item);
+    try {
+      const dataRequire = importSync(itemPath);
+      let dataFunction: DataFunction | DataFunction[] =
+        dataRequire.default || dataRequire;
 
-    if (Array.isArray(options.includedFunctions)) {
-      dataFunction = Array.isArray(dataFunction)
-        ? dataFunction
-        : [dataFunction];
-      dataFunction = dataFunction.filter((func) =>
-        options!.includedFunctions!.some(
-          (name) => name.toLowerCase() === func?.name.toLowerCase(),
-        ),
-      );
-    }
-
-    if (
-      !options?.includedFunctions &&
-      Array.isArray(options.excludedFunctions)
-    ) {
-      dataFunction = Array.isArray(dataFunction)
-        ? dataFunction
-        : [dataFunction];
-      dataFunction = dataFunction.filter(
-        (func) =>
-          !options!.excludedFunctions!.some(
+      if (Array.isArray(options.includedFunctions)) {
+        dataFunction = Array.isArray(dataFunction)
+          ? dataFunction
+          : [dataFunction];
+        dataFunction = dataFunction.filter((func) =>
+          options!.includedFunctions!.some(
             (name) => name.toLowerCase() === func?.name.toLowerCase(),
           ),
-      );
+        );
+      }
+
+      if (
+        !options?.includedFunctions &&
+        Array.isArray(options.excludedFunctions)
+      ) {
+        dataFunction = Array.isArray(dataFunction)
+          ? dataFunction
+          : [dataFunction];
+        dataFunction = dataFunction.filter(
+          (func) =>
+            !options!.excludedFunctions!.some(
+              (name) => name.toLowerCase() === func?.name.toLowerCase(),
+            ),
+        );
+      }
+
+      if (options.strictMode) {
+        aoitelegram.addCustomFunction(dataFunction);
+      } else aoitelegram.ensureCustomFunction(dataFunction);
+
+      if (options.logger === undefined || options.logger) {
+        AoiLogger.info(`Successfully loaded function from "${parse(dirPath)}"`);
+      }
+    } catch (err) {
+      AoiLogger.info(`Faild loaded function from: ${err}`);
     }
-
-    if (options.strictMode) {
-      aoitelegram.addFunction(dataFunction);
-    } else aoitelegram.ensureFunction(dataFunction);
-
-    if (options.logger === undefined || options.logger) {
-      AoiLogger.info(`Successfully loaded function from "${parse(dirPath)}"`);
-    }
-  };
-
-  const processItem = (item: string) => {
-    const itemPath = path.join(dirPath, item);
-    const stats = fs.statSync(itemPath);
-    if (stats.isDirectory()) {
-      loadPluginsFunction(itemPath, aoitelegram, options);
-    } else if (itemPath.endsWith(".js")) {
-      processFile(itemPath);
-    }
-  };
-
-  try {
-    const items = fs.readdirSync(dirPath);
-    items.map(processItem);
-  } catch (error) {
-    AoiLogger.info(`Faild loaded function from: ${error}`);
   }
 }
 
