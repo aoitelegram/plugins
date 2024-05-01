@@ -1,6 +1,5 @@
 import fs from "node:fs";
 import path from "node:path";
-import importSync from "import-sync";
 import { type AoiClient, type DataFunction, AoiLogger } from "aoitelegram";
 
 interface PluginOptions {
@@ -10,7 +9,7 @@ interface PluginOptions {
   includedFunctions?: string[];
 }
 
-function parse(path: string) {
+function parse(path: string): string {
   const args = path.split("/");
   const lastNameIndex = args.length - 1;
   const secondToLastNameIndex = args.length - 2;
@@ -32,13 +31,13 @@ function loadPluginsFunction(
   dirPath: string,
   aoitelegram: AoiClient,
   options: PluginOptions = {},
-) {
+): void {
   const items = fs.readdirSync(dirPath, { recursive: true });
   for (const item of items) {
     if (typeof item !== "string" || !item.endsWith(".js")) continue;
     const itemPath = path.join(process.cwd(), item);
     try {
-      const dataRequire = importSync(itemPath);
+      const dataRequire = require(itemPath);
       let dataFunction: DataFunction | DataFunction[] =
         dataRequire.default || dataRequire;
 
@@ -69,7 +68,7 @@ function loadPluginsFunction(
       }
 
       if (options.strictMode) {
-        aoitelegram.addCustomFunction(dataFunction);
+        aoitelegram.createCustomFunction(dataFunction);
       } else aoitelegram.ensureCustomFunction(dataFunction);
 
       if (options.logger === undefined || options.logger) {

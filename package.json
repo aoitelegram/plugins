@@ -1,8 +1,9 @@
 {
   "name": "@aoitelegram/plugins",
-  "version": "0.0.1",
+  "version": "1.1.0",
   "description": "A manager of plugins for the aoitelegram",
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
+  "typing": "./dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,14 +18,25 @@
     "package.json",
     "README.md"
   ],
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      }
+    }
+  },
   "license": "ISC",
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^18.19.18",
-    "aoitelegram": "^0.8.2"
+    "aoitelegram": "^1.0.0-beta.1"
   },
   "dependencies": {
-    "fs-extra": "^11.2.0",
-    "import-sync": "^2.2.0"
+    "fs-extra": "^11.2.0"
   }
 }

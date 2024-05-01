@@ -1,7 +1,6 @@
 import fs from "node:fs";
 import fsx from "fs-extra";
 import path from "node:path";
-import importSync from "import-sync";
 import { type PluginOptions, loadPluginsFunction } from "./utils";
 import { type AoiClient, AoijsError, version } from "aoitelegram";
 
@@ -46,7 +45,7 @@ class PluginManager {
    * @param options - List options the load.
    * @returns An array of plugin functions.
    */
-  loadDirPlugins(plugins: string, options?: PluginOptions) {
+  loadDirPlugins(plugins: string, options?: PluginOptions): void {
     loadPluginsFunction(
       path.join(process.cwd(), plugins),
       this.aoitelegram,
@@ -60,7 +59,7 @@ class PluginManager {
    * @param options - List options the load.
    * @returns An array of plugin functions.
    */
-  loadPlugins(plugins: string[], options?: PluginOptions) {
+  loadPlugins(plugins: string[], options?: PluginOptions): void {
     if (!Array.isArray(plugins)) {
       throw new AoijsError(
         "parameter",
@@ -82,7 +81,7 @@ class PluginManager {
         );
       }
 
-      const packageJSON = importSync(
+      const packageJSON = require(
         path.join(pathPlugin, ".aoiplugin.json"),
       ).main;
 
@@ -104,7 +103,7 @@ class PluginManager {
   /**
    * Search for plugins in the 'node_modules' directory and copy them to the '.aoiplugins' directory.
    */
-  private searchingForPlugins() {
+  private searchingForPlugins(): void {
     const nodeModulesPath = path.join(process.cwd(), "node_modules");
     const aoiPluginsPath = path.join(nodeModulesPath, ".aoiplugins");
 
@@ -121,7 +120,7 @@ class PluginManager {
       const aoiPluginJsonPath = path.join(folderPath, ".aoiplugin.json");
 
       if (!fs.existsSync(aoiPluginJsonPath)) continue;
-      const pluginInfo = importSync(aoiPluginJsonPath);
+      const pluginInfo = require(aoiPluginJsonPath);
 
       if (!pluginInfo.main) continue;
       if (pluginInfo.version > version) {
