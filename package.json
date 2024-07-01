@@ -11,7 +11,7 @@
   "homepage": "https://aoitelegram.vercel.app",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aoitelegram/plugins"
+    "url": "https://github.com/aoitelegram/plugins.git"
   },
   "files": [
     "./dist",
@@ -34,9 +34,10 @@
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^18.19.18",
-    "aoitelegram": "^1.0.0-beta.1"
+    "aoitelegram": "^1.0.0"
   },
   "dependencies": {
+    "@aoitelegram/util": "^1.0.0",
     "fs-extra": "^11.2.0"
   }
 }

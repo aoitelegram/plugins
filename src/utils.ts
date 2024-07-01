@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import { type AoiClient, type DataFunction, AoiLogger } from "aoitelegram";
+import { Logger } from "@aoitelegram/util";
+import { type AoiClient, type DataFunction } from "aoitelegram";
 
 interface PluginOptions {
   logger?: boolean;
@@ -72,10 +73,10 @@ function loadPluginsFunction(
       } else aoitelegram.ensureCustomFunction(dataFunction);
 
       if (options.logger === undefined || options.logger) {
-        AoiLogger.info(`Successfully loaded function from "${parse(dirPath)}"`);
+        Logger.info(`Successfully loaded function from "${parse(dirPath)}"`);
       }
     } catch (err) {
-      AoiLogger.info(`Faild loaded function from: ${err}`);
+      Logger.info(`Faild loaded function from: ${err}`);
     }
   }
 }
